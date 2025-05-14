@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Exploradores del Planeta</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #eafaf1;
+    margin: 0; padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  #container {
+    max-width: 700px;
+    border: 3px solid #1e8449;
+    border-radius: 15px;
+    padding: 25px;
+    background: white;
+  }
+  h1, h2 {
+    color: #1e8449;
+    text-align: center;
+  }
+  section {
+    display: none;
+  }
+  section.active {
+    display: block;
+  }
+  button {
+    background-color: #1e8449;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  button:hover {
+    background-color: #145a32;
+  }
+  ul {
+    max-width: 400px;
+    margin: 10px auto;
+  }
+  #drag-area {
+    display: flex;
+    justify-content: space-between;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  #items, #biotico, #abiotico {
+    border: 2px dashed #1e8449;
+    border-radius: 10px;
+    padding: 10px;
+    width: 30%;
+    min-height: 150px;
+    background: #f0f9f4;
+  }
+  #items div, #biotico div, #abiotico div {
+    background: #c4e3b8;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 6px;
+    cursor: grab;
+    user-select: none;
+  }
+  #items div.dragging {
+    opacity: 0.5;
+  }
+  form {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  label {
+    display: block;
+    margin-top: 10px;
+  }
+  input[type="text"], textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: vertical;
+  }
+  input[type="submit"] {
+    margin-top: 15px;
+  }
+  .thankyou-message {
+    text-align: center;
+    font-weight: bold;
+    color: green;
+    margin-top: 15px;
+  }
+</style>
+</head>
+<body>
+<div id="container">
+
+  <h1>🌍 Exploradores del Planeta</h1>
+  <p style="text-align: center; font-style: italic;">Una aventura interactiva para descubrir y cuidar los ecosistemas</p>
+  
+  <section id="intro" class="active">
+    <h2>🧭 Introducción</h2>
+    <p>Hola, soy <strong>Flora</strong>, tu guía virtual. En esta aventura descubrirás los ecosistemas que forman nuestro planeta y aprenderás cómo cuidarlos.</p>
+    <button onclick="showSection('ecosistema')">Comenzar aventura</button>
+  </section>
+
+  <section id="ecosistema">
+    <h2>🌿 ¿Qué es un ecosistema?</h2>
+    <p>Un ecosistema es un lugar donde los seres vivos interactúan entre sí y con su entorno.</p>
+    <ul>
+      <li><strong>Biótico:</strong> Animales, plantas y microorganismos.</li>
+      <li><strong>Abiótico:</strong> Agua, aire, suelo y luz solar.</li>
+    </ul>
+    <button onclick="showSection('tipos')">Siguiente: Tipos de ecosistemas</button>
+  </section>
+
+  <section id="tipos">
+    <h2>🌎 Tipos de ecosistemas</h2>
+    <p>Los ecosistemas pueden ser terrestres, acuáticos o aéreos.</p>
+    <ul>
+      <li>Selva tropical</li>
+      <li>Océanos y mares</li>
+      <li>Desiertos</li>
+    </ul>
+    <button onclick="showSection('juego')">Jugar: Clasificar elementos</button>
+  </section>
+
+  <section id="juego">
+    <h2>🎮 Juego interactivo: Clasifica los elementos</h2>
+    <p>Arrastrá cada elemento a la categoría correcta: <em>biótico</em> o <em>abiótico</em>.</p>
+    <div id="drag-area">
+      <div id="items">
+        <div draggable="true" id="hoja">Hoja</div>
+        <div draggable="true" id="roca">Roca</div>
+        <div draggable="true" id="agua">Agua</div>
+        <div draggable="true" id="perro">Perro</div>
+        <div draggable="true" id="sol">Sol</div>
+      </div>
+      <div id="biotico" ondragover="allowDrop(event)" ondrop="drop(event, 'biotico')">
+        <h3 style="text-align:center;">Biótico</h3>
+      </div>
+      <div id="abiotico" ondragover="allowDrop(event)" ondrop="drop(event, 'abiotico')">
+        <h3 style="text-align:center;">Abiótico</h3>
+      </div>
+    </div>
+    <button onclick="checkAnswers()">Verificar respuestas</button>
+    <p id="resultado" style="text-align:center; font-weight:bold;"></p>
+    <button onclick="showSection('podcast')">Siguiente: Podcast</button>
+  </section>
+
+  <section id="podcast">
+    <h2>🎙️ Producción del Podcast</h2>
+    <p>Grabá un podcast contando todo lo que aprendiste sobre un ecosistema y cómo cuidarlo.</p>
+    <p><strong>Pasos:</strong></p>
+    <ol>
+      <li>Elegí el ecosistema que más te gustó.</li>
+      <li>Escribí un breve guion con los puntos principales.</li>
+      <li>Usá Vocaroo o SoundCloud para grabar y subir tu audio.</li>
+      <li>Compartí el enlace en clase para que todos puedan escucharlo.</li>
+    </ol>
+    <button onclick="showSection('evaluacion')">Evaluación y Reflexión</button>
+  </section>
+
+  <section id="evaluacion">
+    <h2>📝 Evaluación y Reflexión</h2>
+    <form id="surveyForm" onsubmit="submitForm(event)">
+      <label for="favEcosistema">¿Qué ecosistema te gustó más?</label>
+      <input type="text" id="favEcosistema" name="favEcosistema" required>
+
+      <label for="aprendizaje">¿Qué aprendiste?</label>
+      <textarea id="aprendizaje" name="aprendizaje" rows="3" required></textarea>
+
+      <label>¿Te gustaron las actividades?</label>
+      <input type="radio" id="si" name="gustaron" value="Sí" required>
+      <label for="si">Sí</label>
+      <input type="radio" id="no" name="gustaron" value="No" required>
+      <label for="no">No</label>
+
+      <input type="submit" value="Enviar respuestas" />
+    </form>
+    <p id="thankyou" class="thankyou-message" style="display:none;">¡Gracias por participar! Volvemos al inicio.</p>
+    <button onclick="showSection('intro')">Volver al inicio</button>
+  </section>
+
+</div>
+
+<script>
+  // Navegación entre secciones
+  function showSection(id) {
+    document.querySelectorAll('section').forEach(sec => {
+      sec.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+    // Limpiar resultados y mensajes en sección juego y encuesta
+    if(id === 'juego') {
+      document.getElementById('resultado').textContent = '';
+      resetDragArea();
+    }
+    if(id === 'evaluacion') {
+      document.getElementById('thankyou').style.display = 'none';
+      document.getElementById('surveyForm').style.display = 'block';
+      document.getElementById('surveyForm').reset();
+    }
+  }
+
+  // Drag & Drop juego
+  function allowDrop(ev) {
+    ev.preventDefault();
+  }
+
+  function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+    ev.target.classList.add('dragging');
+  }
+
+  function drop(ev, category) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    var draggedElem = document.getElementById(data);
+    if(draggedElem) {
+      draggedElem.classList.remove('dragging');
+      ev.target.appendChild(draggedElem);
+    }
+  }
+
+  function resetDragArea() {
+    const items = document.getElementById('items');
+    const biotico = document.getElementById('biotico');
+    const abiotico = document.getElementById('abiotico');
+    ['hoja','roca','agua','perro','sol'].forEach(id => {
+      var el = document.getElementById(id);
+      if(el && el.parentNode !== items) items.appendChild(el);
+    });
+  }
+
+  // Verificar respuestas juego
+  function checkAnswers() {
+    let correct = 0;
+    const biotico = document.getElementById('biotico');
+    const abiotico = document.getElementById('abiotico');
+    if(biotico.querySelector('#hoja')) correct++;
+    if(biotico.querySelector('#perro')) correct++;
+    if(abiotico.querySelector('#roca')) correct++;
+    if(abiotico.querySelector('#agua')) correct++;
+    if(abiotico.querySelector('#sol')) correct++;
+
+    const total = 5;
+    const resultado = document.getElementById('resultado');
+    if(correct === total) {
+      resultado.style.color = 'green';
+      resultado.textContent = '¡Muy bien! Todos los elementos están correctamente clasificados.';
+    } else {
+      resultado.style.color = 'red';
+      resultado.textContent = `Revisá tus respuestas, acertaste ${correct} de ${total}. Intenta de nuevo.`;
+    }
+  }
+
+  // Enviar encuesta
+  function submitForm(event) {
+    event.preventDefault();
+    document.getElementById('surveyForm').style.display = 'none';
+    document.getElementById('thankyou').style.display = 'block';
+  }
+
+  // Preparar drag event listeners
+  document.querySelectorAll('#items div').forEach(elem => {
+    elem.addEventListener('dragstart', drag);
+    elem.addEventListener('dragend', () => elem.classList.remove('dragging'));
+  });
+
+  // Inicializar
+  showSection('intro');
+</script>
+
+</body>
+</html>
+
+
